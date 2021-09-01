@@ -67,16 +67,18 @@ def go(config: DictConfig):
 
         if "data_check" in active_steps:
             _ = mlflow.run(
-            os.path.join(root_path, "data_check"),
+            os.path.join(root_path, "src", "data_check"),
             "main",
             parameters={
-                "reference_artifact": config["etl"]["sample1.csv"],
-                "sample_artifact": "cleaned_sample.csv:latest",
+                "csv": "clean_sample.csv:latest",
+                "ref": "clean_sample.csv:reference",
+                "kl_threshold": config["data_check"]["kl_threshold"],
                 "min_price": config["etl"]["min_price"],
                 "max_price": config["etl"]["max_price"],
-                "kl_threshold": config["data_check"]["kl_threshold"]
+                
             },
         )
+        
 
         if "data_split" in active_steps:
             _ = mlflow.run(
