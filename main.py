@@ -78,17 +78,17 @@ def go(config: DictConfig):
                 
             },
         )
-        
+
 
         if "data_split" in active_steps:
             _ = mlflow.run(
                 f"{config['main']['components_repository']}/train_val_test_split",
             "main",
             parameters={
-                "input": "sample.csv:latest",
+                "input": "clean_sample.csv:latest",
                 "test_size": config["modeling"]["test_size"],
                 "random_seed": config["modeling"]["random_seed"],
-                "stratify_by": config["modeling"]["stratify"],
+                "stratify_by": config["modeling"]["stratify_by"],
             },
         )
 
@@ -104,7 +104,7 @@ def go(config: DictConfig):
             # step
 
             _ = mlflow.run(
-            os.path.join(root_path, "random_forest"),
+            os.path.join(root_path, "src", "train_random_forest"),
             "main",
             parameters={
                 "trainval_artifact": "trainval_data.csv:latest",
@@ -113,7 +113,7 @@ def go(config: DictConfig):
                 "stratify_by": config["modeling"]["stratify_by"],
                 "rf_config": rf_config,
                 "max_tfidf_features": config["modeling"]["max_tfidf_features"],
-                "output_artifact": "model_export" #could also be mlflow_model
+                "output_artifact": "random_forest_export" #could also be mlflow_model
             },
         )
 
