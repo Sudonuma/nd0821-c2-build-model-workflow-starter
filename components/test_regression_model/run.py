@@ -8,8 +8,9 @@ import wandb
 import mlflow
 import pandas as pd
 from sklearn.metrics import mean_absolute_error
-
-from wandb_utils.log_artifact import log_artifact
+import os
+import shutil
+# from wandb_utils.log_artifact import log_artifact
 
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)-15s %(message)s")
@@ -24,8 +25,7 @@ def go(args):
     logger.info("Downloading artifacts")
     # Download input artifact. This will also log that this script is using this
     # particular version of the artifact
-    model_local_path = run.use_artifact(args.mlflow_model).download()
-
+    model_local_path = run.use_artifact('sudonuma/nyc_airbnb/random_forest_export:prod', type='model_export').download()
     # Download test dataset
     test_dataset_path = run.use_artifact(args.test_dataset).file()
 
@@ -34,7 +34,7 @@ def go(args):
     y_test = X_test.pop("price")
 
     logger.info("Loading model and performing inference on test set")
-    sk_pipe = mlflow.sklearn.load_model(model_local_path)
+    sk_pipe = mlflow.sklearn.load_model('./artifacts/random_forest_export')
     y_pred = sk_pipe.predict(X_test)
 
     logger.info("Scoring")
