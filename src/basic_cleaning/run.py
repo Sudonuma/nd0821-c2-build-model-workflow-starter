@@ -65,7 +65,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--output_artifact", 
         type=str,
-        help="Fully-qualified name for the input artifact",
+        help="Name for the output artifact",
         required=True
     )
 
@@ -93,7 +93,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--max_price", 
         type=float,
-        help="minimum price in the sample",
+        help="maximum price in the sample",
         required=True
     )
 
